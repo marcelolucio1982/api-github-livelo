@@ -1,0 +1,112 @@
+<form [formGroup]="form" (ngSubmit)="consultar()" #formDirective="ngForm">
+    <div fxLayout="column">
+        <div class="flex-p">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>Usuários</mat-card-title>
+                    <mat-card-subtitle>Consulta usuários GitHub</mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-content>
+                    <div fxFlex="50" class="flex-p">
+                        <mat-form-field class="w-100">
+                            <input matInput placeholder="Usuário" type="text" formControlName="usuario">
+                            <mat-error *ngIf="formControl.usuario.errors?.minlength">O campo deve possuir pelo menos 3
+                                caracteres
+                            </mat-error>
+                            <mat-error *ngIf="formControl.usuario.errors?.required">O campo é obrigatório para consulta
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </mat-card-content>
+                <mat-card-actions fxLayoutAlign="left">
+
+                    <div fxLayout="row" fxLayoutAlign="start start" fxFlex="50">
+                        <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">
+                            <mat-icon>panorama_fish_eye</mat-icon>Consultar
+                        </button>
+
+                        <button mat-raised-button color="secondary" type="button" (click)="limpar()">
+                            <mat-icon>arrow_back</mat-icon> Limpar
+                        </button>
+                    </div>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </div>
+</form>
+
+<div fxLayout="column">
+    <div class="flex-p">
+
+        <table mat-table [dataSource]="usuarios">
+
+            <!-- Avatar e página de detalhe do usuário -->
+            <ng-container matColumnDef="avatar">
+                <th mat-header-cell *matHeaderCellDef> Detalhe </th>
+                <td mat-cell *matCellDef="let element">
+                    <a href="{{element.url}}" target="_blank" title="Ir para detalhe do usuário">
+                        <div class="avatar">
+                            <img [src]="element.avatar">
+                        </div>
+                    </a>
+                </td>
+            </ng-container>
+
+            <!-- Login -->
+            <ng-container matColumnDef="login">
+                <th mat-header-cell *matHeaderCellDef> Login </th>
+                <td mat-cell *matCellDef="let element"> {{element.login}} </td>
+            </ng-container>
+
+            <!-- Ações de visualização dos repositórios -->
+            <ng-container matColumnDef="acoes">
+                <th mat-header-cell *matHeaderCellDef> </th>
+                <td mat-cell *matCellDef="let element">
+
+                    <button title="Repositórios do usuário" mat-mini-fab color="primary"
+                        (click)="abrirModal(element.urlRepositorios, element)">
+                        <mat-icon>reorder</mat-icon>
+                    </button>
+                    <button title="Repositórios mais visitados pelo usuário" mat-mini-fab color="primary"
+                        (click)="abrirModal(element.urlEstrelas, element)">
+                        <mat-icon>stars</mat-icon>
+                    </button>
+
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="colunas"></tr>
+            <tr mat-row *matRowDef="let row; columns: colunas;"></tr>
+
+        </table>
+
+    </div>
+</div>
+<div fxLayout="column">
+    <div class="flex-p">
+        <mat-card>
+            <mat-card-actions fxLayoutAlign="left">
+
+                <div fxLayout="row" fxLayoutAlign="start start" fxFlex="50">
+                    <button mat-raised-button color="primary" (click)="iniciar()">
+                        <mat-icon>panorama_fish_eye</mat-icon>Inicio
+                    </button>
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="end start" fxFlex="50">
+
+                    <button mat-raised-button color="secondary" type="button" [disabled]="!(paginacao.proximaPagina > 0)"
+                        (click)="proxima()">
+                        <mat-icon>navigate_next</mat-icon>
+                    </button>
+                </div>
+
+
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>
+<div *ngIf="isLoading()" fxLayout="column" fxLayoutAlign="center center" class="spinner">
+    <mat-spinner color="primary"></mat-spinner>
+</div>

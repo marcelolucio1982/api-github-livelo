@@ -1,0 +1,25 @@
+@import "variaveis";
+
+html, body{
+    height: 100%;
+}
+body {
+    font-family: $font-family;
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+*{
+    margin: 0;
+    padding: 0;
+}
+a{
+    outline: none;
+    text-decoration: none;
+}
+.w-100{
+    width: 100% !important;
+}
+.flex-p{
+    padding: $flex-distance !important;
+}
