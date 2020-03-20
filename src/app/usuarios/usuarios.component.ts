@@ -49,7 +49,7 @@ export class UsuariosComponent implements OnInit {
     this.paginacao = new Paginacao();
 
     this.rota.params.subscribe(params => {
-      const usuario = params['usuario'];
+      const usuario = params.usuario;
       if (!usuario) {
         this.iniciar();
       } else {
@@ -77,7 +77,8 @@ export class UsuariosComponent implements OnInit {
         this.usuarios = resposta.dados;
       },
       erro => {
-        alert('nao encontrou');
+        console.error(erro);
+        alert('Erro na consulta a API de usuários do GitHub');
       });
 
     this.loadingService.add(subscricao, {
@@ -87,14 +88,19 @@ export class UsuariosComponent implements OnInit {
 
   consultar() {
 
-    this.gitHubService.obterUsuarioPorNome(this.form.get('usuario').value).subscribe(
+    const subscricao = this.gitHubService.obterUsuarioPorNome(this.form.get('usuario').value).subscribe(
       resposta => {
         this.usuarios = [resposta];
         this.paginacao = new Paginacao();
       },
       erro => {
-        alert('nao encontrou');
+        console.error(erro);
+        alert('Erro na consulta a API de usuários do GitHub');
       });
+
+    this.loadingService.add(subscricao, {
+      key: 'usuarios'
+    });
   }
 
   limpar() {

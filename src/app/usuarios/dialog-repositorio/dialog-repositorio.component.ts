@@ -28,8 +28,8 @@ export class DialogRepositorioComponent implements OnInit {
         this.repositorios = resposta;
       },
       erro => {
-        console.log(erro);
-        alert('nao encontrou');
+        console.error(erro);
+        alert('Erro na consulta a API de repositórios do GitHub');
       });
     this.loadingService.add(subscricao, {
       key: 'repositorios'
